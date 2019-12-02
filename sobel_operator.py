@@ -50,3 +50,16 @@ def compute_gradient_magnitude(image):
             gradient[i][j] = numpy.round(math.sqrt((xsum * xsum) + (ysum * ysum)))
 
     return gradient
+
+
+# TODO - compute gx and gy separately
+def compute_gradient_angle(gradient, gy, gx):
+    # create new array to store result
+    angle = [[0] * len(gradient[0]) for _ in range(len(gradient))]
+
+    for i in range(len(gradient)):
+        for j in range(gradient[i]):
+            if gradient[i][j] == 0:
+                angle[i][j] = 0
+            else:
+                angle[i][j] = numpy.arctan2(gy[i][j], gx[i][j])
