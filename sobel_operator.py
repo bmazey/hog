@@ -1,5 +1,6 @@
 import math
 
+
 gx_mask = [
     [-1, 0, 1],
     [-2, 0, 2],
@@ -16,9 +17,10 @@ gy_mask = [
 # TODO - implement gx and gy standalone methods
 def compute_gradient_magnitude(image):
     # this will store our gradient magnitude results
-    gradient = []
+    gradient = [[0] * len(image[0]) for _ in range(len(image))]
 
     padding = int(len(gx_mask)/2)
+    print(padding)
 
     # iterate over the original image
     for i in range(padding, len(image) - padding):
@@ -26,9 +28,10 @@ def compute_gradient_magnitude(image):
             # horizontal direction
             xsum = 0
             for k in range(len(gx_mask)):
-                for l in range(len(gx_mask[i])):
+                for l in range(len(gx_mask[k])):
                     xshift = k - 1
                     yshift = l - 1
+                    # print('image value: ' + str(image[i + xshift][j + yshift]))
                     xsum += image[i + xshift][j + yshift] * gx_mask[k][l]
 
             # vertical direction
@@ -40,6 +43,9 @@ def compute_gradient_magnitude(image):
                     ysum += image[i + xshift][j + yshift] * gy_mask[m][n]
 
             # compute gradient magnitude
+            # xsum = xsum/4
+            # ysum = ysum/4
             gradient[i][j] = math.sqrt((xsum * xsum) + (ysum * ysum))
 
+    print(gradient[1][1])
     return gradient
