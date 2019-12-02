@@ -32,6 +32,7 @@ def compute_gradient_magnitude(image):
                 for l in range(len(gx_mask[k])):
                     xshift = k - 1
                     yshift = l - 1
+                    # take first position because 3d matrix
                     xsum += image[i + xshift][j + yshift][0] * gx_mask[k][l]
 
             # vertical direction
@@ -40,6 +41,7 @@ def compute_gradient_magnitude(image):
                 for n in range(len(gy_mask[m])):
                     xshift = m - 1
                     yshift = n - 1
+                    # take first position because 3d matrix
                     ysum += image[i + xshift][j + yshift][0] * gy_mask[m][n]
 
             # compute gradient magnitude
