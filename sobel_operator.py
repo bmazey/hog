@@ -1,4 +1,5 @@
 import math
+import numpy
 
 
 gx_mask = [
@@ -31,8 +32,7 @@ def compute_gradient_magnitude(image):
                 for l in range(len(gx_mask[k])):
                     xshift = k - 1
                     yshift = l - 1
-                    # print('image value: ' + str(image[i + xshift][j + yshift]))
-                    xsum += image[i + xshift][j + yshift] * gx_mask[k][l]
+                    xsum += image[i + xshift][j + yshift][0] * gx_mask[k][l]
 
             # vertical direction
             ysum = 0
@@ -40,12 +40,11 @@ def compute_gradient_magnitude(image):
                 for n in range(len(gy_mask[m])):
                     xshift = m - 1
                     yshift = n - 1
-                    ysum += image[i + xshift][j + yshift] * gy_mask[m][n]
+                    ysum += image[i + xshift][j + yshift][0] * gy_mask[m][n]
 
             # compute gradient magnitude
-            # xsum = xsum/4
-            # ysum = ysum/4
-            gradient[i][j] = math.sqrt((xsum * xsum) + (ysum * ysum))
+            xsum = xsum / 4
+            ysum = ysum / 4
+            gradient[i][j] = numpy.round(math.sqrt((xsum * xsum) + (ysum * ysum)))
 
-    print(gradient[1][1])
     return gradient
