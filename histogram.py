@@ -48,4 +48,3 @@ class Histogram:
 
         if angle >= 170 or angle < -10:
             print("error in histogram! angle: " + str(angle))
-
