@@ -46,6 +46,6 @@ class Histogram:
         if angle >= 150 and angle < 170:
             self.bins[8] += magnitude
 
-        if angle >= 170 or angle < -20:
+        if angle >= 170 or angle < -10:
             print("error in histogram! angle: " + str(angle))
 
