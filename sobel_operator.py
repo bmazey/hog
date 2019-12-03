@@ -32,7 +32,7 @@ def compute_horizontal_gradient_magnitude(image):
                     xsum += image[i + xshift][j + yshift][0] * gx_mask[k][l]
 
             # normalize
-            gradient[i][j] = xsum / 4
+            gradient[i][j] = numpy.round(xsum / 4)
 
     return gradient
 
@@ -54,7 +54,7 @@ def compute_vertical_gradient_magnitude(image):
                     ysum += image[i + xshift][j + yshift][0] * gy_mask[m][n]
 
             # normalize
-            gradient[i][j] = ysum / 4
+            gradient[i][j] = numpy.round(ysum / 4)
 
     return gradient
 
@@ -85,8 +85,14 @@ def compute_gradient_angle(gradient, gx, gy):
     angle = [[0] * len(gradient[0]) for _ in range(len(gradient))]
 
     for i in range(len(gradient)):
-        for j in range(gradient[i]):
+        for j in range(len(gradient[i])):
             if gradient[i][j] == 0:
                 angle[i][j] = 0
             else:
-                angle[i][j] = numpy.arctan2(gy[i][j], gx[i][j])
+                radians = numpy.arctan2(gy[i][j], gx[i][j])
+                degrees = numpy.rad2deg(radians)
+                if degrees < 0:
+                    degrees += 360
+                angle[i][j] = degrees
+
+    return angle
