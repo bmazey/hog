@@ -8,12 +8,16 @@ def detect():
     image = get_image_array('C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\training_images_positive\\crop_000010b.bmp')
     gx_gradient = compute_horizontal_gradient_magnitude(image)
     print('gx_gradient: ' + str(gx_gradient[28][28]))
+
     gy_gradient = compute_vertical_gradient_magnitude(image)
     print('gy_gradient: ' + str(gy_gradient[28][28]))
+
     magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
     print('gradient: ' + str(magnitude[28][28]))
+
     theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
     print('angle: ' + str(theta[28][28]))
+
     feature_vector = compute_hog_feature(theta, magnitude)
     items = len(feature_vector) * len(feature_vector[0])
     print('total items: ' + str(items))
