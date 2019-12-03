@@ -9,9 +9,9 @@ def detect():
     print('gx_gradient: ' + str(gx_gradient[28][28]))
     gy_gradient = compute_vertical_gradient_magnitude(image)
     print('gy_gradient: ' + str(gy_gradient[28][28]))
-    gradient = compute_gradient_magnitude(gx_gradient, gy_gradient)
-    print('gradient: ' + str(gradient[28][28]))
-    theta = compute_gradient_angle(gradient, gx_gradient, gy_gradient)
+    magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
+    print('gradient: ' + str(magnitude[28][28]))
+    theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
     print('angle: ' + str(theta[28][28]))
 
 
