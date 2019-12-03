@@ -52,7 +52,7 @@ def compute_hog_feature(theta, magnitude):
             magnitude_cell = [[0] * cell_size for _ in range(cell_size)]
 
             for m in range(0, len(theta_block), cell_size):
-                for n in range(0, len(theta_block[0]), cell_size):
+                for n in range(0, len(theta_block), cell_size):
                     # copy into 8 x 8 subarrays
                     for o in range(cell_size):
                         for p in range(cell_size):
