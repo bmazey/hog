@@ -5,13 +5,53 @@ class LbpHistogram:
         self.magnitude = magnitude
         # 59 bins: 58 normal transitions, final bin is abnormal
         self.bins = [0 for _ in range(59)]
+        self.compute_feature_vector(magnitude)
 
     def compute_feature_vector(self, magnitude):
         return
 
-    def compute_lbp_pattern(self, gradient):
+    def compute_lbp_pattern(self, i, j, magnitude):
+        pattern = ''
+        try:
+            if magnitude[i - 1][j - 1] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i - 1][j] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i - 1][j + 1] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i][j + 1] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i + 1][j + 1] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i + 1][j] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i + 1][j - 1] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
+            if magnitude[i][j - 1] > magnitude[i][j]:
+                pattern += '1'
+            else:
+                pattern += '0'
 
-        return
+            self.add_to_bin(pattern, magnitude[i][j])
+
+        except IndexError:
+            # default value for border case is 5
+            pattern = '00000101'
+            self.add_to_bin(pattern, magnitude[i][j])
 
     def add_to_bin(self, pattern, gradient):
         # convert LBP binary pattern to decimal
