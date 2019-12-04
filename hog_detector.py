@@ -51,6 +51,9 @@ def compute_hog_feature(theta, magnitude):
                     magnitude_block[k][l] = magnitude[i + k][j + l]
 
             blocks += 1
+
+            # TODO - apply L2 normalization
+
             # break each 16 x 16 subarray into 8 x 8 cells
             theta_cell = [[0] * cell_size for _ in range(cell_size)]
             magnitude_cell = [[0] * cell_size for _ in range(cell_size)]
