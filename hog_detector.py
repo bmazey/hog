@@ -21,7 +21,7 @@ def detect():
 
     feature_vector = compute_hog_feature(theta, magnitude)
     items = len(feature_vector) * len(feature_vector[0])
-    print('total items: ' + str(items))
+    print('hog feature space: ' + str(items))
 
     lbp_feature_vector = compute_lbp_feature_histograms(image)
     print(str(lbp_feature_vector))
