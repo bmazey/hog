@@ -71,6 +71,8 @@ def compute_hog_feature(theta, magnitude):
                             magnitude_cell[o][p] = magnitude_block[m + o][n + p]
 
                     # add histogram to hog feature vector
+                    # FIXME - must have histograms by block for L2 norm
+                    # concat histogram bins for blocks (4 cells) and then apply formula in slides
                     cells += 1
                     histogram = Histogram(theta_cell, magnitude_cell)
                     hog_feature.append(histogram.bins)
