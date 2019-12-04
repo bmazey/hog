@@ -26,6 +26,7 @@ def detect():
     lbp_feature_vector = compute_lbp_feature_histograms(image)
     print(str(lbp_feature_vector))
 
+
 def compute_hog_feature(theta, magnitude):
     # sanity check
     assert len(theta) == len(magnitude)
