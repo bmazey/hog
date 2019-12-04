@@ -120,4 +120,5 @@ class LbpHistogram:
             255: 57
         }
         bin_number = patterns.get(decimal, 58)
-        self.bins[bin_number] += pixel
+        # changed from += pixel
+        self.bins[bin_number] += 1
