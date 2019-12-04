@@ -1,6 +1,7 @@
 from lbp_histogram import LbpHistogram
 
 
+# FIXME - need to divide by 256 to normalize (every value should be between 0 and 1)
 def compute_lbp_feature_histograms(image):
     # start by dividing into non-overlapping 16 x 16 blocks
     lbp_feature = []
