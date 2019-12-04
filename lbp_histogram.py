@@ -1,59 +1,62 @@
 
 
 class LbpHistogram:
-    def __init__(self, magnitude):
-        self.magnitude = magnitude
+    def __init__(self, image_block):
+        self.magnitude = image_block
         # 59 bins: 58 normal transitions, final bin is abnormal
         self.bins = [0 for _ in range(59)]
-        self.compute_feature_vector(magnitude)
+        self.compute_feature_vector(image_block)
 
-    def compute_feature_vector(self, magnitude):
+    def compute_feature_vector(self, image_block):
+        for i in range(len(image_block)):
+            for j in range(len(image_block[i])):
+                self.compute_lbp_pattern(i, j, image_block)
         return
 
-    def compute_lbp_pattern(self, i, j, magnitude):
+    def compute_lbp_pattern(self, i, j, image_block):
         pattern = ''
         try:
-            if magnitude[i - 1][j - 1] > magnitude[i][j]:
+            if image_block[i - 1][j - 1] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i - 1][j] > magnitude[i][j]:
+            if image_block[i - 1][j] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i - 1][j + 1] > magnitude[i][j]:
+            if image_block[i - 1][j + 1] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i][j + 1] > magnitude[i][j]:
+            if image_block[i][j + 1] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i + 1][j + 1] > magnitude[i][j]:
+            if image_block[i + 1][j + 1] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i + 1][j] > magnitude[i][j]:
+            if image_block[i + 1][j] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i + 1][j - 1] > magnitude[i][j]:
+            if image_block[i + 1][j - 1] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
-            if magnitude[i][j - 1] > magnitude[i][j]:
+            if image_block[i][j - 1] > image_block[i][j]:
                 pattern += '1'
             else:
                 pattern += '0'
 
-            self.add_to_bin(pattern, magnitude[i][j])
+            self.add_to_bin(pattern, image_block[i][j])
 
         except IndexError:
             # default value for border case is 5
             pattern = '00000101'
-            self.add_to_bin(pattern, magnitude[i][j])
+            self.add_to_bin(pattern, image_block[i][j])
 
-    def add_to_bin(self, pattern, gradient):
+    def add_to_bin(self, pattern, pixel):
         # convert LBP binary pattern to decimal
         decimal = int(pattern, 2)
         patterns = {
@@ -117,4 +120,4 @@ class LbpHistogram:
             255: 57
         }
         bin_number = patterns.get(decimal, 58)
-        self.bins[bin_number] += gradient
+        self.bins[bin_number] += pixel
