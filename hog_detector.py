@@ -2,6 +2,7 @@ from image_converter import get_image_array, convert_grayscale
 from sobel_operator import compute_gradient_magnitude, compute_horizontal_gradient_magnitude, \
     compute_vertical_gradient_magnitude, compute_gradient_angle
 from histogram import Histogram
+from lbp import compute_lbp_feature_histograms
 
 
 def detect():
@@ -22,6 +23,8 @@ def detect():
     items = len(feature_vector) * len(feature_vector[0])
     print('total items: ' + str(items))
 
+    lbp_feature_vector = compute_lbp_feature_histograms(image)
+    print(str(lbp_feature_vector))
 
 def compute_hog_feature(theta, magnitude):
     # sanity check
