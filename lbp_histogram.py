@@ -5,8 +5,13 @@ class LbpHistogram:
     def __init__(self, image_block):
         self.magnitude = image_block
         # 59 bins: 58 normal transitions, final bin is abnormal
-        self.bins = [0 for _ in range(59)]
+        self.bins = [0.0 for _ in range(59)]
         self.compute_feature_vector(image_block)
+        self.normalize()
+
+    def normalize(self):
+        for i in range(len(self.bins)):
+            self.bins[i] = self.bins[i] / 256
 
     def compute_feature_vector(self, image_block):
         for i in range(len(image_block)):
@@ -50,14 +55,14 @@ class LbpHistogram:
             else:
                 pattern += '0'
 
-            self.add_to_bin(pattern, image_block[i][j])
+            self.add_to_bin(pattern)
 
         except IndexError:
             # default value for border case is 5
             pattern = '00000101'
-            self.add_to_bin(pattern, image_block[i][j])
+            self.add_to_bin(pattern)
 
-    def add_to_bin(self, pattern, pixel):
+    def add_to_bin(self, pattern):
         # convert LBP binary pattern to decimal
         decimal = int(pattern, 2)
         patterns = {
