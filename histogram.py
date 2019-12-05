@@ -36,7 +36,6 @@ class Histogram:
                 self.magnitude_cells.append(magnitude_cell)
 
     def compute_feature_vector(self):
-        # 4 is the total number of cells
         for i in range(len(self.theta_cells)):
             for j in range(len(self.theta_cells[i])):
                 for k in range(len(self.theta_cells[i][j])):
