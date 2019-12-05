@@ -9,7 +9,7 @@ class Histogram:
         # 4 x 9 bins matrix: each 16 x 16 block becomes four 8 x 8 cells
         self.bins = [[0.0] * 9 for _ in range(4)]
         self.cell_size = 8
-        # four 8 x 8 cells matrices
+        # four 8 x 8 cell matrices
         self.theta_cells = []
         self.magnitude_cells = []
         self.convert_blocks_to_cells()
