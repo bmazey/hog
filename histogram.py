@@ -18,13 +18,14 @@ class Histogram:
 
     def normalize(self):
         # apply L2 norm
+        sum = 0
         for bin in self.bins:
-            sum = 0
             for i in range(len(bin)):
                 sum += bin[i] ** 2
 
-            distance = sum ** 0.5
+        distance = sum ** 0.5
 
+        for bin in self.bins:
             for j in range(len(bin)):
                 bin[j] /= distance
 
