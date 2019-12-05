@@ -41,7 +41,6 @@ class Histogram:
                 for k in range(len(self.theta_cells[i][j])):
                     self.add_to_bin(self.theta_cells[i][j][k], self.magnitude_cells[i][j][k], self.bins[i])
 
-    # FIXME - just look at bin centers and calculate distance to add % of gradient to two bins
     def add_to_bin(self, angle, magnitude, bin):
         # working with unsigned angles
         if angle >= 180:
