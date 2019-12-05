@@ -17,7 +17,7 @@ class Histogram:
         self.normalize()
 
     def normalize(self):
-        # apply L2 norm
+        # apply L2 normalization
         sum = 0
         for bin in self.bins:
             for i in range(len(bin)):
