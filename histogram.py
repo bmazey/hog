@@ -9,9 +9,9 @@ class Histogram:
         # 4 x 9 bins matrix: each 16 x 16 block becomes four 8 x 8 cells
         self.bins = [[0.0] * 9 for _ in range(4)]
         self.cell_size = 8
-        # 8 x 8 x 4 cells matrices
-        self.theta_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
-        self.magnitude_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
+        # four 8 x 8 cells matrices
+        self.theta_cells = []
+        self.magnitude_cells = []
         self.convert_blocks_to_cells()
         self.compute_feature_vector()
         self.normalize()
@@ -36,6 +36,7 @@ class Histogram:
                 self.magnitude_cells.append(magnitude_cell)
 
     def compute_feature_vector(self):
+        # 4 is the total number of cells
         for i in range(len(self.theta_cells)):
             for j in range(len(self.theta_cells[i])):
                 for k in range(len(self.theta_cells[i][j])):
