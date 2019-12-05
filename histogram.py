@@ -1,3 +1,4 @@
+import numpy
 
 
 class Histogram:
@@ -42,37 +43,75 @@ class Histogram:
 
     # FIXME - just look at bin centers and calculate distance to add % of gradient to two bins
     def add_to_bin(self, angle, magnitude, bin):
-        if angle >= 170 and angle < 350:
+        # working with unsigned angles
+        if angle >= 180:
             angle -= 180
-            # FIXME - handle corner case between bins 1 and 9
-            # if angle >= -20 and angle < 0:
-                # overlapping bins
-        if angle >= -10 and angle < 10:
-            self.bins[0] += magnitude
 
-        if angle >= 10 and angle < 30:
-            self.bins[1] += magnitude
+        # corner case between 1st and 9th bin
+        if angle >= 160:
+            first_bin = 8
+            second_bin = 0
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 30 and angle < 50:
-            self.bins[2] += magnitude
+        if angle >= 0 and angle < 20:
+            first_bin = 0
+            second_bin = 1
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 50 and angle < 70:
-            self.bins[3] += magnitude
+        if angle >= 20 and angle < 40:
+            first_bin = 1
+            second_bin = 2
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 70 and angle < 90:
-            self.bins[4] += magnitude
+        if angle >= 40 and angle < 60:
+            first_bin = 2
+            second_bin = 3
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 90 and angle < 110:
-            self.bins[5] += magnitude
+        if angle >= 60 and angle < 80:
+            first_bin = 3
+            second_bin = 4
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 110 and angle < 130:
-            self.bins[6] += magnitude
+        if angle >= 80 and angle < 100:
+            first_bin = 4
+            second_bin = 5
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 130 and angle < 150:
-            self.bins[7] += magnitude
+        if angle >= 100 and angle < 120:
+            first_bin = 5
+            second_bin = 6
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 150 and angle < 170:
-            self.bins[8] += magnitude
+        if angle >= 120 and angle < 140:
+            first_bin = 6
+            second_bin = 7
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
 
-        if angle >= 170 or angle < -10:
-            print("error in histogram! angle: " + str(angle))
+        if angle >= 140 and angle < 160:
+            first_bin = 7
+            second_bin = 8
+            percentage = self.calculate_distance(angle, self.centers[first_bin])
+            bin[first_bin] += (100 - percentage) * magnitude
+            bin[second_bin] += percentage * magnitude
+
+    def calculate_distance(self, angle, center):
+        # calculate what percentage of the angle belongs to a given center (20 is static distance between centers)
+        percentage = numpy.absolute(angle - center) / 20
+        return percentage
