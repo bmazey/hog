@@ -12,7 +12,7 @@ class Histogram:
         self.theta_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
         self.magnitude_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
         self.convert_blocks_to_cells()
-        self.compute_feature_vector(self.theta_cells, self.magnitude_cells)
+        self.compute_feature_vector()
         self.normalize()
 
     def normalize(self):
@@ -34,11 +34,11 @@ class Histogram:
                 self.theta_cells.append(theta_cell)
                 self.magnitude_cells.append(magnitude_cell)
 
-    def compute_feature_vector(self, theta_cells, magnitude_cells):
-        for i in range(len(theta_cells)):
-            for j in range(len(theta_cells[i])):
-                for k in range(len(theta_cells[i][j])):
-                    self.add_to_bin(theta_cells[i][j][k], magnitude_cells[i][j][k], self.bins[i])
+    def compute_feature_vector(self):
+        for i in range(len(self.theta_cells)):
+            for j in range(len(self.theta_cells[i])):
+                for k in range(len(self.theta_cells[i][j])):
+                    self.add_to_bin(self.theta_cells[i][j][k], self.magnitude_cells[i][j][k], self.bins[i])
 
     # FIXME - just look at bin centers and calculate distance to add % of gradient to two bins
     def add_to_bin(self, angle, magnitude, bin):
