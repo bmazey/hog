@@ -12,7 +12,6 @@ class Histogram:
         self.theta_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
         self.magnitude_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
         self.convert_blocks_to_cells()
-        # FIXME - change to cells
         self.compute_feature_vector(self.theta_cells, self.magnitude_cells)
         self.normalize()
 
