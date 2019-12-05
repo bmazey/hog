@@ -17,8 +17,16 @@ class Histogram:
         self.normalize()
 
     def normalize(self):
-        # TODO - flatten bins and apply L2 norm
-        return
+        # apply L2 norm
+        for bin in self.bins:
+            sum = 0
+            for i in range(len(bin)):
+                sum += bin[i] ** 2
+
+            distance = sum ** 0.5
+
+            for j in range(len(bin)):
+                bin[j] /= distance
 
     def convert_blocks_to_cells(self):
         for m in range(0, len(self.theta_block), self.cell_size):
@@ -51,63 +59,63 @@ class Histogram:
             first_bin = 8
             second_bin = 0
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 0 and angle < 20:
             first_bin = 0
             second_bin = 1
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 20 and angle < 40:
             first_bin = 1
             second_bin = 2
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 40 and angle < 60:
             first_bin = 2
             second_bin = 3
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 60 and angle < 80:
             first_bin = 3
             second_bin = 4
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 80 and angle < 100:
             first_bin = 4
             second_bin = 5
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 100 and angle < 120:
             first_bin = 5
             second_bin = 6
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 120 and angle < 140:
             first_bin = 6
             second_bin = 7
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
         if angle >= 140 and angle < 160:
             first_bin = 7
             second_bin = 8
             percentage = self.calculate_distance(angle, self.centers[first_bin])
-            bin[first_bin] += (100 - percentage) * magnitude
+            bin[first_bin] += (1 - percentage) * magnitude
             bin[second_bin] += percentage * magnitude
 
     def calculate_distance(self, angle, center):

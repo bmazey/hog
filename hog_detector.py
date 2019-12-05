@@ -20,8 +20,9 @@ def detect():
     print('angle: ' + str(theta[28][28]))
 
     feature_vector = compute_hog_feature(theta, magnitude)
-    items = len(feature_vector) * len(feature_vector[0])
-    print('hog feature space: ' + str(items))
+    hog_items = len(feature_vector) * len(feature_vector[0]) * len(feature_vector[0][0])
+    print('hog feature space: ' + str(hog_items))
+    print(str(feature_vector))
 
     lbp_feature_vector = compute_lbp_feature_histograms(image)
     print(str(lbp_feature_vector))
@@ -40,9 +41,6 @@ def compute_hog_feature(theta, magnitude):
     cell_size = 8
     block_size = 16
 
-    cells = 0
-    blocks = 0
-
     for i in range(0, len(theta) - cell_size, cell_size):
         for j in range(0, len(theta[i]) - cell_size, cell_size):
             # divide arrays into 16 x 16 subarrays
@@ -54,12 +52,9 @@ def compute_hog_feature(theta, magnitude):
                     theta_block[k][l] = theta[i + k][j + l]
                     magnitude_block[k][l] = magnitude[i + k][j + l]
 
-            blocks += 1
-
             histogram = Histogram(theta_block, magnitude_block)
             hog_feature.append(histogram.bins)
 
-    print('blocks: ' + str(blocks) + ' | ' + 'cells: ' + str(cells))
     return hog_feature
 
 
