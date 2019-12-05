@@ -5,8 +5,16 @@ class Histogram:
         self.magnitude = magnitude
         self.theta = theta
         self.centers = [0, 20, 40, 60, 80, 100, 120, 140, 160]
-        self.bins = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        # 4 x 9 bins matrix: each 16 x 16 block becomes four 8 x 8 cells
+        self.bins = [[0.0] * 9 for _ in range(4)]
+        self.cell_size = 8
+        # 8 x 8 x 4 cells matrices
+        self.theta_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
+        self.magnitude_cells = [[[0] * self.cell_size for _ in range(self.cell_size)] for _ in range(4)]
         self.compute_feature_vector(theta, magnitude)
+
+    def convert_blocks_to_cells(self, theta, magnitude):
+
 
     def compute_feature_vector(self, theta, magnitude):
         for i in range(len(theta)):
