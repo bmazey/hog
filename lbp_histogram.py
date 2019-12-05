@@ -3,20 +3,20 @@
 # FIXME - need to normalize by diving by 256 (every value should be between 0 and 1)
 class LbpHistogram:
     def __init__(self, image_block):
-        self.magnitude = image_block
+        self.image_block = image_block
         # 59 bins: 58 normal transitions, final bin is abnormal
         self.bins = [0.0 for _ in range(59)]
-        self.compute_feature_vector(image_block)
+        self.compute_feature_vector()
         self.normalize()
 
     def normalize(self):
         for i in range(len(self.bins)):
             self.bins[i] = self.bins[i] / 256
 
-    def compute_feature_vector(self, image_block):
-        for i in range(len(image_block)):
-            for j in range(len(image_block[i])):
-                self.compute_lbp_pattern(i, j, image_block)
+    def compute_feature_vector(self):
+        for i in range(len(self.image_block)):
+            for j in range(len(self.image_block[i])):
+                self.compute_lbp_pattern(i, j, self.image_block)
         return
 
     def compute_lbp_pattern(self, i, j, image_block):
