@@ -3,6 +3,7 @@ from sobel_operator import compute_gradient_magnitude, compute_horizontal_gradie
     compute_vertical_gradient_magnitude, compute_gradient_angle
 from histogram import Histogram
 from lbp import compute_lbp_feature_histograms
+from neural_network import HogNeuralNetwork
 
 
 def detect():
@@ -38,8 +39,12 @@ def detect():
         for j in range(len(lbp_feature_vector[i])):
             assert lbp_feature_vector[i][j] >= 0 and lbp_feature_vector[i][j] <= 1
 
+    # the hog feature vector is 3D ... the lbp feature vector is 2D
+    # TODO - write a function which generates an hog feature vector for all training images (10 positive / 10 negative)
+    positive_hog_feature_vectors = [hog_feature_vector, hog_feature_vector]
+    negative_hog_feature_vectors = [hog_feature_vector, hog_feature_vector]
 
-
+    network = HogNeuralNetwork(positive_hog_feature_vectors, negative_hog_feature_vectors)
 
 
 def compute_hog_feature(theta, magnitude):
