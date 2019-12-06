@@ -44,7 +44,7 @@ def detect():
     positive_hog_feature_vectors = [hog_feature_vector, hog_feature_vector]
     negative_hog_feature_vectors = [hog_feature_vector, hog_feature_vector]
 
-    network = HogNeuralNetwork(positive_hog_feature_vectors, negative_hog_feature_vectors)
+    network = HogNeuralNetwork(positive_hog_feature_vectors, negative_hog_feature_vectors, 200)
 
 
 def compute_hog_feature(theta, magnitude):
