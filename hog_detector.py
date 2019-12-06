@@ -19,13 +19,27 @@ def detect():
     theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
     print('angle: ' + str(theta[28][28]))
 
-    feature_vector = compute_hog_feature(theta, magnitude)
-    hog_items = len(feature_vector) * len(feature_vector[0]) * len(feature_vector[0][0])
+    hog_feature_vector = compute_hog_feature(theta, magnitude)
+    hog_items = len(hog_feature_vector) * len(hog_feature_vector[0]) * len(hog_feature_vector[0][0])
     print('hog feature space: ' + str(hog_items))
-    print(str(feature_vector))
+    print(str(hog_feature_vector))
+
+    # assert all values are between 0 and 1
+    for i in range(len(hog_feature_vector)):
+        for j in range(len(hog_feature_vector[i])):
+            for k in range(len(hog_feature_vector[i][j])):
+                assert hog_feature_vector[i][j][k] >= 0 and hog_feature_vector[i][j][k] <= 1
 
     lbp_feature_vector = compute_lbp_feature_histograms(image)
     print(str(lbp_feature_vector))
+
+    # assert all values are between 0 and 1
+    for i in range(len(lbp_feature_vector)):
+        for j in range(len(lbp_feature_vector[i])):
+            assert lbp_feature_vector[i][j] >= 0 and lbp_feature_vector[i][j] <= 1
+
+
+
 
 
 def compute_hog_feature(theta, magnitude):
