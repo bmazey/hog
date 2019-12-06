@@ -22,6 +22,8 @@ def detect():
 
     hog_feature_vector = compute_hog_feature(theta, magnitude)
     hog_items = len(hog_feature_vector) * len(hog_feature_vector[0]) * len(hog_feature_vector[0][0])
+    print('hog feature dimensions: ' + str(len(hog_feature_vector)) + ' x ' + str(len(hog_feature_vector[0])) + ' x '
+          + str(len(hog_feature_vector[0][0])))
     print('hog feature space: ' + str(hog_items))
     print(str(hog_feature_vector))
 
