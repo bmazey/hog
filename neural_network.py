@@ -68,8 +68,8 @@ class HogNeuralNetwork:
         return 1 * (x > 0)
 
     def feed_forward(self):
-        hidden_layer_activation = self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights)
-        # hidden layer activation should be 1 x 200
+        hidden_layer_activation = self.matrix_add(self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights), self.hidden_layer_bias)
+        # hidden layer activation should be 2 x 200
         print('hidden layer activation: ' + str(hidden_layer_activation))
         print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
               + str(len(hidden_layer_activation[0])))
@@ -81,6 +81,8 @@ class HogNeuralNetwork:
         print('predicted output dimensions: ' + str(len(self.predicted_output)) + ' x ' + str(len(self.predicted_output[0])))
 
     def matrix_multiply(self, X, Y):
+        # print('dimensions of X: ' + str(len(X)) + ' x ' + str(len(X[0])))
+        # print('dimensions of Y: ' + str(len(Y)) + ' x ' + str(len(Y[0])))
         result = [[0 for x in range(len(Y[0]))] for y in range(len(X))]
         for i in range(len(X)):
             # iterate through columns of Y
@@ -88,4 +90,14 @@ class HogNeuralNetwork:
                 # iterate through rows of Y
                 for k in range(len(Y)):
                     result[i][j] += X[i][k] * Y[k][j]
+        return result
+
+    def matrix_add(self, X, Y):
+        # add Y to X ... X is 2d, Y is 1d
+        # print('dimensions of X: ' + str(len(X)) + ' x ' + str(len(X[0])))
+        # print('dimensions of Y: ' + str(len(Y)) + ' x ' + str(len(Y[0])))
+        result = [[0 for x in range(len(X[0]))] for y in range(len(X))]
+        for i in range(len(X)):
+            for j in range(len(X[i])):
+                result[i][j] += Y[0][j]
         return result
