@@ -52,6 +52,7 @@ class HogNeuralNetwork:
         return x
 
     # derivative of sigmoid
+    # FIXME - x is now a list!
     def derivative_of_sigmoid(self, x):
         return x * (1 - x)
 
@@ -64,6 +65,7 @@ class HogNeuralNetwork:
         return x
 
     # derivative of ReLU
+    # FIXME - x is now a list!
     def derivative_of_relu(self, x):
         return 1 * (x > 0)
 
