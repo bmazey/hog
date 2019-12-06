@@ -72,6 +72,7 @@ class HogNeuralNetwork:
     def feed_forward(self):
         hidden_layer_activation = self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights)
         # hidden layer activation should be 2 x 200
+        # TODO - hidden layer values are all the same because random() is only generated once in constructor
         print('hidden layer activation: ' + str(hidden_layer_activation))
         print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
               + str(len(hidden_layer_activation[0])))
