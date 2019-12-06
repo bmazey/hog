@@ -1,5 +1,4 @@
 from itertools import chain
-import numpy
 import math
 import random
 
@@ -22,7 +21,8 @@ class HogNeuralNetwork:
         self.hidden_layer_bias = [[0.0] * self.hidden_layer_neurons] * 1
         print('dimensions of hidden layer bias: ' + str(len(self.hidden_layer_bias)) + ' x ' + str(len(self.hidden_layer_bias[0])))
         # output layer weights should be 200 x 1
-        self.output_layer_weights = [[random.uniform(0, 1)] * self.hidden_layer_neurons]
+        self.output_layer_weights = [[random.uniform(0, 1)] for _ in range(self.hidden_layer_neurons)]
+        print('dimensions of output layer weights: ' + str(len(self.output_layer_weights)) + ' x ' + str(len(self.output_layer_weights[0])))
         self.output_layer_bias = [0]
         # dummy value for hidden_layer_output
         self.hidden_layer_output = [0]
@@ -68,7 +68,7 @@ class HogNeuralNetwork:
         return 1 * (x > 0)
 
     def feed_forward(self):
-        hidden_layer_activation = self.matrix_add(self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights), self.hidden_layer_bias)
+        hidden_layer_activation = self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights)
         # hidden layer activation should be 2 x 200
         print('hidden layer activation: ' + str(hidden_layer_activation))
         print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
