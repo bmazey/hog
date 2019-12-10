@@ -25,15 +25,15 @@ class HogNeuralNetwork:
         print('dimensions of output layer weights: ' + str(len(self.output_layer_weights)) + ' x ' + str(len(self.output_layer_weights[0])))
         self.output_layer_bias = [[-1]]
         # dummy value for hidden_layer_output
-        self.hidden_layer_output = [0]
+        self.hidden_layer_output = [0.0]
         # dummy value for predicted output
-        self.predicted_output = [0]
+        self.predicted_output = [0.0]
         # dummy value for output layer delta
-        self.output_layer_delta = [0]
+        self.output_layer_delta = [0.0]
         # dummy value for hidden layer delta
-        self.hidden_layer_delta = [0]
+        self.hidden_layer_delta = [0.0]
         # this will contain sum of all errors
-        self.error = 0
+        self.error = 0.0
         self.feed_forward()
 
     def flatten(self, feature_vector):
@@ -70,7 +70,7 @@ class HogNeuralNetwork:
         for i in range(len(X)):
             for j in range(len(X[i])):
                 if X[i][j] <= 0:
-                    X[i][j] = 0
+                    X[i][j] = 0.0
         return X
 
     # derivative of ReLU
@@ -108,13 +108,30 @@ class HogNeuralNetwork:
         self.hidden_layer_delta = self.matrix_multiply(hidden_layer_errors,
                                                        self.derivative_of_relu(self.hidden_layer_output))
 
-    def update(self):
-        return
+    def update(self, inputs):
+        # update hidden layer weights and hidden layer / output layer bias
+        # output layer first
+        test_matrix = self.matrix_multiply(self.transpose(self.hidden_layer_output), self.output_layer_delta)
+        for i in range(len(test_matrix)):
+            for j in range(len(test_matrix[i])):
+                test_matrix[i][j] = test_matrix[i][j] * self.learning_rate
+        # assert that test_matrix is 1 x 200
+        self.output_layer_weights = self.matrix_add(self.output_layer_weights, test_matrix)
+
+        sum = 0
+        for k in range(len(self.output_layer_delta)):
+            sum += self.output_layer_delta[k]
+        result = [[sum * self.learning_rate]]
+
+        self.output_layer_bias = self.matrix_add(self.output_layer_bias, result)
+
+        # now update hidden layer
+
 
     def matrix_multiply(self, X, Y):
         # print('dimensions of X: ' + str(len(X)) + ' x ' + str(len(X[0])))
         # print('dimensions of Y: ' + str(len(Y)) + ' x ' + str(len(Y[0])))
-        result = [[0 for x in range(len(Y[0]))] for y in range(len(X))]
+        result = [[0.0 for x in range(len(Y[0]))] for y in range(len(X))]
         for i in range(len(X)):
             # iterate through columns of Y
             for j in range(len(Y[0])):
@@ -127,7 +144,7 @@ class HogNeuralNetwork:
         # add Y to X ... X is 2d, Y is 1d
         # print('dimensions of X: ' + str(len(X)) + ' x ' + str(len(X[0])))
         # print('dimensions of Y: ' + str(len(Y)) + ' x ' + str(len(Y[0])))
-        result = [[0 for x in range(len(X[0]))] for y in range(len(X))]
+        result = [[0.0 for x in range(len(X[0]))] for y in range(len(X))]
         for i in range(len(X)):
             for j in range(len(X[i])):
                 result[i][j] = X[i][j] + Y[0][j]
