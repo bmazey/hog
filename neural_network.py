@@ -70,9 +70,7 @@ class HogNeuralNetwork:
         return 1 * (X > 0)
 
     def feed_forward(self):
-        test_array = self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights)
-        print('test array: ' + str(test_array))
-        hidden_layer_activation = self.matrix_add(test_array, self.hidden_layer_bias)
+        hidden_layer_activation = self.matrix_add(self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights), self.hidden_layer_bias)
         # hidden layer activation should be 2 x 200
         print('hidden layer activation: ' + str(hidden_layer_activation))
         print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
