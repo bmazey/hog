@@ -5,7 +5,7 @@ import random
 
 class HogNeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 100
+        self.epochs = 10
         self.learning_rate = 0.1
         self.human_feature_vectors = self.flatten(human_feature_vectors)
         print('human feature vectors: ' + str(self.human_feature_vectors))
@@ -150,7 +150,7 @@ class HogNeuralNetwork:
             output_layer_errors[i][0] = target_output[i][0] - self.predicted_output[i][0]
 
         sigmoid = self.derivative_of_sigmoid(self.predicted_output)
-        print('derivative of sigmoid predicted output: ' + str(self.predicted_output))
+        print('derivative of sigmoid predicted output: ' + str(sigmoid))
         for i in range(len(sigmoid)):
             for j in range(len(sigmoid[i])):
                 self.output_layer_delta[i][j] = output_layer_errors[i][j] * sigmoid[i][j]
