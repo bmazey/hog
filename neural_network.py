@@ -23,7 +23,7 @@ class HogNeuralNetwork:
         # self.output_layer_weights = [[random.uniform(0, 1)] for _ in range(self.hidden_layer_neurons)]
         self.output_layer_weights = self.create_random_matrix(1, self.hidden_layer_neurons)
         print('dimensions of output layer weights: ' + str(len(self.output_layer_weights)) + ' x ' + str(len(self.output_layer_weights[0])))
-        self.output_layer_bias = [0]
+        self.output_layer_bias = [[-1]]
         # dummy value for hidden_layer_output
         self.hidden_layer_output = [0]
         # dummy value for predicted output
@@ -45,41 +45,42 @@ class HogNeuralNetwork:
         return flattened
 
     # sigmoid function for output neuron
-    def sigmoid(self, x):
-        for i in range(len(x)):
-            for j in range(len(x[i])):
-                x[i][j] = 1 / (1 + math.exp(0 - x[i][j]))
-        return x
+    def sigmoid(self, X):
+        for i in range(len(X)):
+            for j in range(len(X[i])):
+                X[i][j] = 1 / (1 + math.exp(0 - X[i][j]))
+        return X
 
     # derivative of sigmoid
     # FIXME - x is now a list!
-    def derivative_of_sigmoid(self, x):
-        return x * (1 - x)
+    def derivative_of_sigmoid(self, X):
+        return X * (1 - X)
 
     # ReLu function for hidden neurons
-    def relu(self, x):
-        for i in range(len(x)):
-            for j in range(len(x[i])):
-                if x[i][j] <= 0:
-                    x[i][j] = 0
-        return x
+    def relu(self, X):
+        for i in range(len(X)):
+            for j in range(len(X[i])):
+                if X[i][j] <= 0:
+                    X[i][j] = 0
+        return X
 
     # derivative of ReLU
     # FIXME - x is now a list!
-    def derivative_of_relu(self, x):
-        return 1 * (x > 0)
+    def derivative_of_relu(self, X):
+        return 1 * (X > 0)
 
     def feed_forward(self):
-        hidden_layer_activation = self.matrix_add(self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights),
-                                                  self.hidden_layer_bias)
+        test_array = self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights)
+        print('test array: ' + str(test_array))
+        hidden_layer_activation = self.matrix_add(test_array, self.hidden_layer_bias)
         # hidden layer activation should be 2 x 200
-        # TODO - hidden layer values are all the same because random() is only generated once in constructor
         print('hidden layer activation: ' + str(hidden_layer_activation))
         print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
               + str(len(hidden_layer_activation[0])))
         self.hidden_layer_output = self.relu(hidden_layer_activation)
         print('hidden layer output: ' + str(self.hidden_layer_output))
-        output_layer_activation = self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights)
+        output_layer_activation = self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
+                                                  self.output_layer_bias)
         self.predicted_output = self.sigmoid(output_layer_activation)
         print('predicted output: ' + str(self.predicted_output))
         print('predicted output dimensions: ' + str(len(self.predicted_output)) + ' x ' + str(len(self.predicted_output[0])))
@@ -103,7 +104,7 @@ class HogNeuralNetwork:
         result = [[0 for x in range(len(X[0]))] for y in range(len(X))]
         for i in range(len(X)):
             for j in range(len(X[i])):
-                result[i][j] += Y[0][j]
+                result[i][j] = X[i][j] + Y[0][j]
         return result
 
     def create_random_matrix(self, length, width):
