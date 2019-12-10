@@ -28,6 +28,12 @@ class HogNeuralNetwork:
         self.hidden_layer_output = [0]
         # dummy value for predicted output
         self.predicted_output = [0]
+        # dummy value for output layer delta
+        self.output_layer_delta = [0]
+        # dummy value for hidden layer delta
+        self.hidden_layer_delta = [0]
+        # this will contain sum of all errors
+        self.error = 0
         self.feed_forward()
 
     def flatten(self, feature_vector):
@@ -54,7 +60,10 @@ class HogNeuralNetwork:
     # derivative of sigmoid
     # FIXME - x is now a list!
     def derivative_of_sigmoid(self, X):
-        return X * (1 - X)
+        for i in range(len(X)):
+            for j in range(len(X[i])):
+                X[i][j] = X[i][j] * (1 - X[i][j])
+        return X
 
     # ReLu function for hidden neurons
     def relu(self, X):
@@ -67,8 +76,12 @@ class HogNeuralNetwork:
     # derivative of ReLU
     # FIXME - x is now a list!
     def derivative_of_relu(self, X):
-        return 1 * (X > 0)
+        for i in range(len(X)):
+            for j in range(len(X[i])):
+                X[i][j] = 1 * (X[i][j] > 0)
+        return X
 
+    # forward direction for training
     def feed_forward(self):
         hidden_layer_activation = self.matrix_add(self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights), self.hidden_layer_bias)
         # hidden layer activation should be 2 x 200
@@ -82,6 +95,21 @@ class HogNeuralNetwork:
         self.predicted_output = self.sigmoid(output_layer_activation)
         print('predicted output: ' + str(self.predicted_output))
         print('predicted output dimensions: ' + str(len(self.predicted_output)) + ' x ' + str(len(self.predicted_output[0])))
+
+    # backward direction for training
+    # target output is an array of 2 x 1 containing 1 for humans and 0 for non-humans
+    def backpropogate(self, target_output):
+        # check that this output is a 2 x 1 matrix
+        # this wont work
+        output_layer_errors = target_output - self.predicted_output
+        self.output_layer_delta = self.matrix_multiply(output_layer_errors,
+                                                       self.derivative_of_sigmoid(self.predicted_output))
+        hidden_layer_errors = self.matrix_multiply(self.output_layer_delta, self.transpose(self.output_layer_weights))
+        self.hidden_layer_delta = self.matrix_multiply(hidden_layer_errors,
+                                                       self.derivative_of_relu(self.hidden_layer_output))
+
+    def update(self):
+        return
 
     def matrix_multiply(self, X, Y):
         # print('dimensions of X: ' + str(len(X)) + ' x ' + str(len(X[0])))
@@ -111,3 +139,7 @@ class HogNeuralNetwork:
             for j in range(len(random_matrix[i])):
                 random_matrix[i][j] = random.uniform(0, 1)
         return random_matrix
+
+    # check if correct
+    def transpose(self, X):
+        return list(map(list, zip(*X)))
