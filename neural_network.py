@@ -34,11 +34,40 @@ class HogNeuralNetwork:
         self.hidden_layer_delta = [[0.0], [0.0]]
         # this will contain sum of all errors
         self.error = 0.0
-        self.feed_forward()
         # testing
-        target = [[1], [1]]
-        self.backpropogate(target)
-        self.update(self.human_feature_vectors)
+        self.train()
+        print('weights: ' + str(self.hidden_layer_weights))
+        print('hidden layer bias: ' + str(self.hidden_layer_bias))
+        print('output layer bias: ' + str(self.output_layer_bias))
+
+    def train(self):
+        # train positive first
+        for i in range(self.epochs):
+            self.feed_forward(self.human_feature_vectors)
+            # FIXME - needs to be 1 x 10
+            target = [[1], [1]]
+            self.backpropogate(target)
+            self.update(self.human_feature_vectors)
+
+        print('predicted output for human: ' + str(self.predicted_output))
+
+        # anything that needs to be saved after training positive can be saved here!
+
+        # reset values
+        self.hidden_layer_weights = self.create_random_matrix(self.hidden_layer_neurons, len(self.human_feature_vectors[0]))
+        self.hidden_layer_bias = [[-1.0] * self.hidden_layer_neurons] * 1
+
+        # train negative
+        for i in range(self.epochs):
+            self.feed_forward(self.nonhuman_feature_vectors)
+            # FIXME - needs to be 1 x 10
+            target = [[0], [0]]
+            self.backpropogate(target)
+            self.update(self.nonhuman_feature_vectors)
+
+        print('predicted output for non-human: ' + str(self.predicted_output))
+
+
 
     def flatten(self, feature_vector):
         # we have a complicated structure here. we need to flatten 10 3d feature matrices
@@ -77,7 +106,6 @@ class HogNeuralNetwork:
         return X
 
     # derivative of ReLU
-    # FIXME - x is now a list!
     def derivative_of_relu(self, X):
         for i in range(len(X)):
             for j in range(len(X[i])):
@@ -85,19 +113,19 @@ class HogNeuralNetwork:
         return X
 
     # forward direction for training
-    def feed_forward(self):
-        hidden_layer_activation = self.matrix_add(self.matrix_multiply(self.human_feature_vectors, self.hidden_layer_weights), self.hidden_layer_bias)
+    def feed_forward(self, vectors):
+        hidden_layer_activation = self.matrix_add(self.matrix_multiply(vectors, self.hidden_layer_weights), self.hidden_layer_bias)
         # hidden layer activation should be 2 x 200
-        print('hidden layer activation: ' + str(hidden_layer_activation))
-        print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
-              + str(len(hidden_layer_activation[0])))
+        # print('hidden layer activation: ' + str(hidden_layer_activation))
+        # print('hidden layer activation dimensions: ' + str(len(hidden_layer_activation)) + ' x '
+        #       + str(len(hidden_layer_activation[0])))
         self.hidden_layer_output = self.relu(hidden_layer_activation)
-        print('hidden layer output: ' + str(self.hidden_layer_output))
+        # print('hidden layer output: ' + str(self.hidden_layer_output))
         output_layer_activation = self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
                                                   self.output_layer_bias)
         self.predicted_output = self.sigmoid(output_layer_activation)
-        print('predicted output: ' + str(self.predicted_output))
-        print('predicted output dimensions: ' + str(len(self.predicted_output)) + ' x ' + str(len(self.predicted_output[0])))
+        # print('predicted output: ' + str(self.predicted_output))
+        # print('predicted output dimensions: ' + str(len(self.predicted_output)) + ' x ' + str(len(self.predicted_output[0])))
 
     # backward direction for training
     # target output is an array of 2 x 1 containing 1 for humans and 0 for non-humans
