@@ -27,14 +27,18 @@ class HogNeuralNetwork:
         # dummy value for hidden_layer_output
         self.hidden_layer_output = [0.0]
         # dummy value for predicted output
-        self.predicted_output = [0.0]
-        # dummy value for output layer delta
-        self.output_layer_delta = [0.0]
-        # dummy value for hidden layer delta
-        self.hidden_layer_delta = [0.0]
+        self.predicted_output = [[0.0]]
+        # FIXME dummy value for output layer delta - needs to be 1 x 10
+        self.output_layer_delta = [[0.0], [0.0]]
+        # FIXME dummy value for hidden layer delta - needs to be a 1 x 10
+        self.hidden_layer_delta = [[0.0], [0.0]]
         # this will contain sum of all errors
         self.error = 0.0
         self.feed_forward()
+        # testing
+        target = [[1], [1]]
+        self.backpropogate(target)
+        self.update(self.human_feature_vectors)
 
     def flatten(self, feature_vector):
         # we have a complicated structure here. we need to flatten 10 3d feature matrices
@@ -58,7 +62,6 @@ class HogNeuralNetwork:
         return X
 
     # derivative of sigmoid
-    # FIXME - x is now a list!
     def derivative_of_sigmoid(self, X):
         for i in range(len(X)):
             for j in range(len(X[i])):
@@ -100,10 +103,23 @@ class HogNeuralNetwork:
     # target output is an array of 2 x 1 containing 1 for humans and 0 for non-humans
     def backpropogate(self, target_output):
         # check that this output is a 2 x 1 matrix
-        # this wont work
-        output_layer_errors = target_output - self.predicted_output
-        self.output_layer_delta = self.matrix_multiply(output_layer_errors,
-                                                       self.derivative_of_sigmoid(self.predicted_output))
+        # output_layer_errors = target_output - self.predicted_output
+        # FIXME - needs to be dynamic (list of 10)
+        output_layer_errors = [[0.0], [0.0]]
+        print('dimensions of predicted output: ' + str(len(self.predicted_output)) + ' x ' +
+              str(len(self.predicted_output[0])))
+
+        print('dimensions of output layer errors: ' + str(len(output_layer_errors)) + ' x ' +
+              str(len(output_layer_errors[0])))
+
+        for i in range(len(target_output)):
+            output_layer_errors[i][0] = target_output[i][0] - self.predicted_output[i][0]
+
+        sigmoid = self.derivative_of_sigmoid(self.predicted_output)
+        for i in range(len(sigmoid)):
+            for j in range(len(sigmoid[i])):
+                self.output_layer_delta[i][j] = output_layer_errors[i][j] * sigmoid[i][j]
+
         hidden_layer_errors = self.matrix_multiply(self.output_layer_delta, self.transpose(self.output_layer_weights))
         self.hidden_layer_delta = self.matrix_multiply(hidden_layer_errors,
                                                        self.derivative_of_relu(self.hidden_layer_output))
@@ -120,13 +136,32 @@ class HogNeuralNetwork:
 
         sum = 0
         for k in range(len(self.output_layer_delta)):
-            sum += self.output_layer_delta[k]
+            for l in range(len(self.output_layer_delta[k])):
+                sum += self.output_layer_delta[k][l]
         result = [[sum * self.learning_rate]]
 
         self.output_layer_bias = self.matrix_add(self.output_layer_bias, result)
 
         # now update hidden layer
+        test_matrix = self.matrix_multiply(self.transpose(inputs), self.hidden_layer_delta)
+        for i in range(len(test_matrix)):
+            for j in range(len(test_matrix[i])):
+                test_matrix[i][j] = test_matrix[i][j] * self.learning_rate
+        # assert that test_matrix is 1 x 200
+        self.hidden_layer_weights = self.matrix_add(self.output_layer_weights, test_matrix)
 
+        sum = 0
+        for k in range(len(self.hidden_layer_delta)):
+            for l in range(len(self.hidden_layer_delta[k])):
+                sum += self.hidden_layer_delta[k][l]
+        result = sum * self.learning_rate
+
+        print('hidden layer bias dimensions: ' + str(len(self.hidden_layer_bias)) + ' x ' + str(len(self.hidden_layer_bias[0])))
+
+        # self.hidden_layer_bias = self.matrix_add(self.hidden_layer_bias, result)
+        for i in range(len(self.hidden_layer_bias)):
+            for j in range(len(self.hidden_layer_bias[i])):
+                self.hidden_layer_bias[i][j] += result
 
     def matrix_multiply(self, X, Y):
         # print('dimensions of X: ' + str(len(X)) + ' x ' + str(len(X[0])))
