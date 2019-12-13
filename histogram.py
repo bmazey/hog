@@ -12,9 +12,16 @@ class Histogram:
         # four 8 x 8 cell matrices
         self.theta_cells = []
         self.magnitude_cells = []
+        self.flattened = []
         self.convert_blocks_to_cells()
         self.compute_feature_vector()
         self.normalize()
+        self.flatten_bins()
+
+    def flatten_bins(self):
+        for bin in self.bins:
+            for item in bin:
+                self.flattened.append(item)
 
     def normalize(self):
         # apply L2 normalization

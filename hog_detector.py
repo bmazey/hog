@@ -21,7 +21,24 @@ def detect():
     theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
     print('angle: ' + str(theta[28][28]))
 
-    hog_feature_vector = compute_hog_feature(theta, magnitude)
+    hog_feature_vector_1 = compute_hog_feature(theta, magnitude)
+
+    # second positive image
+    image = get_image_array(
+        'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\training_images_positive\\crop001030c.bmp')
+    gx_gradient = compute_horizontal_gradient_magnitude(image)
+    print('gx_gradient: ' + str(gx_gradient[28][28]))
+
+    gy_gradient = compute_vertical_gradient_magnitude(image)
+    print('gy_gradient: ' + str(gy_gradient[28][28]))
+
+    magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
+    print('gradient: ' + str(magnitude[28][28]))
+
+    theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
+    print('angle: ' + str(theta[28][28]))
+
+    hog_feature_vector_2 = compute_hog_feature(theta, magnitude)
 
     # negative image
     neg_image = get_image_array('C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\training_images_negative\\01-03e_cut.bmp')
@@ -62,7 +79,7 @@ def detect():
 
     # the hog feature vector is 3D ... the lbp feature vector is 2D
     # TODO - write a function which generates an hog feature vector for all training images (10 positive / 10 negative)
-    positive_hog_feature_vectors = [hog_feature_vector, hog_feature_vector]
+    positive_hog_feature_vectors = [hog_feature_vector_1, hog_feature_vector_2]
     negative_hog_feature_vectors = [neg_hog_feature_vector, neg_hog_feature_vector]
 
     network = HogNeuralNetwork(positive_hog_feature_vectors, negative_hog_feature_vectors, 200)
@@ -93,7 +110,9 @@ def compute_hog_feature(theta, magnitude):
                     magnitude_block[k][l] = magnitude[i + k][j + l]
 
             histogram = Histogram(theta_block, magnitude_block)
-            hog_feature.append(histogram.bins)
+
+            for item in histogram.flattened:
+                hog_feature.append(item)
 
     return hog_feature
 
