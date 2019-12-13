@@ -34,7 +34,10 @@ class Histogram:
 
         for bin in self.bins:
             for j in range(len(bin)):
-                bin[j] = bin[j] / distance
+                if distance == 0:
+                    continue
+                else:
+                    bin[j] = bin[j] / distance
 
     def convert_blocks_to_cells(self):
         for m in range(0, len(self.theta_block), self.cell_size):
