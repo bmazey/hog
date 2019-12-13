@@ -114,6 +114,8 @@ class NeuralNetwork:
         for i in range(len(target_output)):
             output_layer_errors[i][0] = target_output[i][0] - self.predicted_output[i][0]
 
+        # TODO - compute average error here! take absolute value
+
         sigmoid = self.derivative_of_sigmoid(self.predicted_output)
 
         for i in range(len(sigmoid)):
