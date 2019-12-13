@@ -44,6 +44,27 @@ class HogNeuralNetwork:
 
         print('predicted output for human: ' + str(self.predicted_output))
 
+        # TODO - anything we need to save for human should be saved here!
+
+        # reset values
+        self.hidden_layer_weights = self.create_random_matrix(self.hidden_layer_neurons, len(self.human_feature_vectors[0]))
+        self.output_layer_weights = self.create_random_matrix(1, self.hidden_layer_neurons)
+        self.hidden_layer_bias = [[-1.0] * self.hidden_layer_neurons] * 1
+        self.output_layer_bias = [[-1.0]]
+        self.predicted_output = [[0.0]]
+
+        for i in range(self.epochs):
+            print('iteration: ' + str(i))
+            self.feed_forward(self.nonhuman_feature_vectors)
+            # FIXME - needs to be 1 x 10
+            target = [[0], [0]]
+            self.backpropogate(target)
+            self.update(self.nonhuman_feature_vectors)
+
+        print('predicted output for non-human: ' + str(self.predicted_output))
+
+        # TODO - anything we need to save for non-human should be saved here!
+
     # sigmoid function for output neuron
     def sigmoid(self, X):
         for i in range(len(X)):
@@ -180,8 +201,7 @@ class HogNeuralNetwork:
         random_matrix = [[0.0] * length for _ in range(width)]
         for i in range(len(random_matrix)):
             for j in range(len(random_matrix[i])):
-                # FIXME
-                random_matrix[i][j] = random.uniform(0, 1)
+                random_matrix[i][j] = random.uniform(-0.5, 0.5)
         return random_matrix
 
     # check if correct
