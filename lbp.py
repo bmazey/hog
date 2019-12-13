@@ -22,5 +22,5 @@ def compute_lbp_feature_histograms(image):
             for item in lbp_histogram.bins:
                 lbp_feature.append(item)
 
-    print('lbp feature space: ' + str(blocks * 59))
+    # print('lbp feature space: ' + str(blocks * 59))
     return lbp_feature

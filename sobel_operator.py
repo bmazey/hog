@@ -87,6 +87,7 @@ def compute_gradient_angle(gradient, gx, gy):
             if gradient[i][j] == 0:
                 angle[i][j] = 0
             else:
+                # FIXME - check is gx is 0!
                 radians = numpy.arctan2(gy[i][j], gx[i][j])
                 degrees = numpy.rad2deg(radians)
                 if degrees < 0:

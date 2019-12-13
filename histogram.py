@@ -28,13 +28,13 @@ class Histogram:
         sum = 0
         for bin in self.bins:
             for i in range(len(bin)):
-                sum += bin[i] ** 2
+                sum += (bin[i] ** 2)
 
         distance = sum ** 0.5
 
         for bin in self.bins:
             for j in range(len(bin)):
-                bin[j] /= distance
+                bin[j] = bin[j] / distance
 
     def convert_blocks_to_cells(self):
         for m in range(0, len(self.theta_block), self.cell_size):

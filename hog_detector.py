@@ -76,8 +76,8 @@ def generate_hog_lbp_feature_vectors(path):
         theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
         hog_vector = compute_hog_feature(theta, magnitude)
         lbp_vector = compute_lbp_feature_histograms(image)
-        print('hog vector: ' + str(hog_vector))
-        print('lbp vector: ' + str(lbp_vector))
+        # print('hog vector: ' + str(hog_vector))
+        # print('lbp vector: ' + str(lbp_vector))
         vectors.append(hog_vector + lbp_vector)
 
     return vectors
@@ -88,7 +88,7 @@ def compute_hog_feature(theta, magnitude):
     assert len(theta) == len(magnitude)
     assert len(theta[0]) == len(magnitude[0])
 
-    print('dimensions of theta: ' + str(len(theta)) + " x " + str(len(theta[0])))
+    # print('dimensions of theta: ' + str(len(theta)) + " x " + str(len(theta[0])))
 
     # final result
     hog_feature = []
