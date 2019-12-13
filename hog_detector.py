@@ -35,6 +35,13 @@ def detect():
     #     for j in range(len(lbp_feature_vector[i])):
     #         assert lbp_feature_vector[i][j] >= 0 and lbp_feature_vector[i][j] <= 1
 
+    positive_hog_lbp_feature_vectors = generate_hog_lbp_feature_vectors(
+        'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\training_images_positive')
+    negative_hog_lbp_feature_vectors = generate_hog_lbp_feature_vectors(
+        'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\training_images_negative')
+
+    hog_lbp_network = NeuralNetwork(positive_hog_lbp_feature_vectors, negative_hog_lbp_feature_vectors, 200)
+
     hog_network = NeuralNetwork(positive_hog_feature_vectors, negative_hog_feature_vectors, 200)
 
     # TODO - lbp network!
@@ -46,13 +53,33 @@ def generate_hog_feature_vectors(path):
     vectors = []
     files = os.listdir(path)
     for file in files:
-        print(str(file))
+        # print(str(file))
         image = get_image_array(path + '\\' + file)
         gx_gradient = compute_horizontal_gradient_magnitude(image)
         gy_gradient = compute_vertical_gradient_magnitude(image)
         magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
         theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
         vectors.append(compute_hog_feature(theta, magnitude))
+    return vectors
+
+
+def generate_hog_lbp_feature_vectors(path):
+    # final result
+    vectors = []
+    files = os.listdir(path)
+    for file in files:
+        # print(str(file))
+        image = get_image_array(path + '\\' + file)
+        gx_gradient = compute_horizontal_gradient_magnitude(image)
+        gy_gradient = compute_vertical_gradient_magnitude(image)
+        magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
+        theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
+        hog_vector = compute_hog_feature(theta, magnitude)
+        lbp_vector = compute_lbp_feature_histograms(image)
+        print('hog vector: ' + str(hog_vector))
+        print('lbp vector: ' + str(lbp_vector))
+        vectors.append(hog_vector + lbp_vector)
+
     return vectors
 
 

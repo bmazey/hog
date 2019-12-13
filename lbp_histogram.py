@@ -1,6 +1,5 @@
 
 
-# FIXME - need to normalize by diving by 256 (every value should be between 0 and 1)
 class LbpHistogram:
     def __init__(self, image_block):
         self.image_block = image_block
