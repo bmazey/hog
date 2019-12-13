@@ -1,11 +1,10 @@
-from itertools import chain
 import math
 import random
 
 
 class HogNeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 100
+        self.epochs = 10
         self.learning_rate = 0.1
         self.human_feature_vectors = human_feature_vectors
         print('human feature vectors dimensions: ' + str(len(self.human_feature_vectors)) + ' x ' + str(len(self.human_feature_vectors[0])))
@@ -54,10 +53,12 @@ class HogNeuralNetwork:
 
     # derivative of sigmoid
     def derivative_of_sigmoid(self, X):
+        # this needs to return a copy
+        result = [[0.0 for x in range(len(X[0]))] for y in range(len(X))]
         for i in range(len(X)):
             for j in range(len(X[i])):
-                X[i][j] = X[i][j] * (1 - X[i][j])
-        return X
+                result[i][j] = X[i][j] * (1 - X[i][j])
+        return result
 
     # ReLu function for hidden neurons
     def relu(self, X):
@@ -76,15 +77,11 @@ class HogNeuralNetwork:
 
     # forward direction for training
     def feed_forward(self, vectors):
-        # hidden layer activation should be 2 x 200
-        hidden_layer_activation = self.matrix_add(self.matrix_multiply(vectors, self.hidden_layer_weights), self.hidden_layer_bias)
+        self.hidden_layer_output = self.relu(self.matrix_add(self.matrix_multiply(vectors, self.hidden_layer_weights), self.hidden_layer_bias))
 
-        self.hidden_layer_output = self.relu(hidden_layer_activation)
+        self.predicted_output = self.sigmoid(self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
+                                                  self.output_layer_bias))
 
-        output_layer_activation = self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
-                                                  self.output_layer_bias)
-
-        self.predicted_output = self.sigmoid(output_layer_activation)
         print('sigmoid predicted output: ' + str(self.predicted_output))
 
     # backward direction for training
@@ -98,6 +95,7 @@ class HogNeuralNetwork:
             output_layer_errors[i][0] = target_output[i][0] - self.predicted_output[i][0]
 
         sigmoid = self.derivative_of_sigmoid(self.predicted_output)
+
         print('derivative of sigmoid predicted output: ' + str(sigmoid))
         for i in range(len(sigmoid)):
             for j in range(len(sigmoid[i])):
@@ -165,7 +163,7 @@ class HogNeuralNetwork:
             for j in range(len(Y[0])):
                 # iterate through rows of Y
                 for k in range(len(Y)):
-                    result[i][j] += X[i][k] * Y[k][j]
+                    result[i][j] = X[i][k] * Y[k][j]
         return result
 
     def matrix_add(self, X, Y):
