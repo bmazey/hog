@@ -2,9 +2,10 @@ import math
 import random
 
 
-class HogNeuralNetwork:
+# ALERT! number of human / non-human feature vectors must be the same!
+class NeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 10
+        self.epochs = 3
         self.learning_rate = 0.1
         self.human_feature_vectors = human_feature_vectors
         print('human feature vectors dimensions: ' + str(len(self.human_feature_vectors)) + ' x ' + str(len(self.human_feature_vectors[0])))
@@ -24,9 +25,9 @@ class HogNeuralNetwork:
         # dummy value for predicted output
         self.predicted_output = [[0.0]]
         # FIXME dummy value for output layer delta - needs to be 1 x 10
-        self.output_layer_delta = [[0.0], [0.0]]
+        self.output_layer_delta = [[0.0] for _ in range(len(self.human_feature_vectors))]
         # FIXME dummy value for hidden layer delta - needs to be a 1 x 10
-        self.hidden_layer_delta = [[0.0], [0.0]]
+        self.hidden_layer_delta = [[0.0] for _ in range(len(self.human_feature_vectors))]
         # this will contain sum of all errors
         self.average_error = 0.0
 
@@ -35,10 +36,10 @@ class HogNeuralNetwork:
     def train(self):
         # train positive first
         for i in range(self.epochs):
-            print('iteration: ' + str(i))
+            print('human iteration: ' + str(i))
             self.feed_forward(self.human_feature_vectors)
             # FIXME - needs to be 1 x 10
-            target = [[1], [1]]
+            target = [[1.0] for _ in range(len(self.human_feature_vectors))]
             self.backpropogate(target)
             self.update(self.human_feature_vectors)
 
@@ -54,10 +55,10 @@ class HogNeuralNetwork:
         self.predicted_output = [[0.0]]
 
         for i in range(self.epochs):
-            print('iteration: ' + str(i))
+            print('non-human iteration: ' + str(i))
             self.feed_forward(self.nonhuman_feature_vectors)
             # FIXME - needs to be 1 x 10
-            target = [[0], [0]]
+            target = [[0.0] for _ in range(len(self.nonhuman_feature_vectors))]
             self.backpropogate(target)
             self.update(self.nonhuman_feature_vectors)
 
@@ -103,21 +104,18 @@ class HogNeuralNetwork:
         self.predicted_output = self.sigmoid(self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
                                                   self.output_layer_bias))
 
-        print('sigmoid predicted output: ' + str(self.predicted_output))
-
     # backward direction for training
     # target output is an array of 2 x 1 containing 1 for humans and 0 for non-humans
     def backpropogate(self, target_output):
         # check that this output is a 2 x 1 matrix
         # output_layer_errors = target_output - self.predicted_output
         # FIXME - this needs to be 1 x 10 based on number of feature vectors
-        output_layer_errors = [[0.0], [0.0]]
+        output_layer_errors = [[0.0] for _ in range(len(self.human_feature_vectors))]
         for i in range(len(target_output)):
             output_layer_errors[i][0] = target_output[i][0] - self.predicted_output[i][0]
 
         sigmoid = self.derivative_of_sigmoid(self.predicted_output)
 
-        print('derivative of sigmoid predicted output: ' + str(sigmoid))
         for i in range(len(sigmoid)):
             for j in range(len(sigmoid[i])):
                 self.output_layer_delta[i][j] = output_layer_errors[i][j] * sigmoid[i][j]
