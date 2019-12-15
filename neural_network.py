@@ -1,12 +1,13 @@
 import math
 import random
+import copy
 
 
 # ALERT! number of human / non-human feature vectors must be the same!
 class NeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 3
-        self.learning_rate = 0.1
+        self.epochs = 2
+        self.learning_rate = 0.2
         self.human_feature_vectors = human_feature_vectors
         print('human feature vectors dimensions: ' + str(len(self.human_feature_vectors)) + ' x ' + str(len(self.human_feature_vectors[0])))
         self.nonhuman_feature_vectors = nonhuman_feature_vectors
@@ -23,14 +24,13 @@ class NeuralNetwork:
         # dummy value for hidden_layer_output
         self.hidden_layer_output = [0.0]
         # dummy value for predicted output
-        self.predicted_output = [[0.0]]
+        self.predicted_output = [[0.0] for _ in range(len(self.human_feature_vectors))]
         # FIXME dummy value for output layer delta - needs to be 1 x 10
         self.output_layer_delta = [[0.0] for _ in range(len(self.human_feature_vectors))]
         # FIXME dummy value for hidden layer delta - needs to be a 1 x 10
         self.hidden_layer_delta = [[0.0] for _ in range(len(self.human_feature_vectors))]
         # this will contain sum of all errors
         self.average_error = 0.0
-
         self.train()
 
     def train(self):
@@ -45,14 +45,7 @@ class NeuralNetwork:
 
         print('predicted output for human: ' + str(self.predicted_output))
 
-        # TODO - anything we need to save for human should be saved here!
-
-        # reset values
-        self.hidden_layer_weights = self.create_random_matrix(self.hidden_layer_neurons, len(self.human_feature_vectors[0]))
-        self.output_layer_weights = self.create_random_matrix(1, self.hidden_layer_neurons)
-        self.hidden_layer_bias = [[-1.0] * self.hidden_layer_neurons] * 1
-        self.output_layer_bias = [[-1.0]]
-        self.predicted_output = [[0.0]]
+        # TODO reset predicted output?
 
         for i in range(self.epochs):
             print('non-human iteration: ' + str(i))
@@ -64,14 +57,13 @@ class NeuralNetwork:
 
         print('predicted output for non-human: ' + str(self.predicted_output))
 
-        # TODO - anything we need to save for non-human should be saved here!
-
     # sigmoid function for output neuron
     def sigmoid(self, X):
+        result = [[0.0 for x in range(len(X[0]))] for y in range(len(X))]
         for i in range(len(X)):
             for j in range(len(X[i])):
-                X[i][j] = 1 / (1 + math.exp(0 - X[i][j]))
-        return X
+                result[i][j] = 1 / (1 + math.exp(0 - X[i][j]))
+        return result
 
     # derivative of sigmoid
     def derivative_of_sigmoid(self, X):
@@ -84,25 +76,29 @@ class NeuralNetwork:
 
     # ReLu function for hidden neurons
     def relu(self, X):
+        result = [[0.0 for x in range(len(X[0]))] for y in range(len(X))]
         for i in range(len(X)):
             for j in range(len(X[i])):
                 if X[i][j] <= 0:
-                    X[i][j] = 0.0
-        return X
+                    result[i][j] = 0.0
+                else:
+                    result[i][j] = X[i][j]
+        return result
 
     # derivative of ReLU
     def derivative_of_relu(self, X):
+        result = [[0.0 for x in range(len(X[0]))] for y in range(len(X))]
         for i in range(len(X)):
             for j in range(len(X[i])):
-                X[i][j] = 1 * (X[i][j] > 0)
-        return X
+                result[i][j] = 1 * (X[i][j] > 0)
+        return result
 
     # forward direction for training
     def feed_forward(self, vectors):
         self.hidden_layer_output = self.relu(self.matrix_add(self.matrix_multiply(vectors, self.hidden_layer_weights), self.hidden_layer_bias))
 
         self.predicted_output = self.sigmoid(self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
-                                                  self.output_layer_bias))
+                                                self.output_layer_bias))
 
     # backward direction for training
     # target output is an array of 2 x 1 containing 1 for humans and 0 for non-humans
@@ -210,3 +206,13 @@ class NeuralNetwork:
         for row in range(len(X)):
             result = [[X[j][i] for j in range(len(X))] for i in range(len(X[0]))]
         return result
+
+    def predict(self, vector):
+        print('dimensions of vector: ' + str(len(vector)) + ' x ' + str(len(vector[0])))
+        print('dimensions of hidden layer weights: ' + str(len(self.hidden_layer_weights)) + ' x ' + str(len(self.hidden_layer_weights[0])))
+        print('dimensions of hidden layer bias: ' + str(len(self.hidden_layer_bias)) + ' x ' + str(
+            len(self.hidden_layer_bias[0])))
+        hidden_layer_output = self.relu(self.matrix_add(self.matrix_multiply(vector, self.hidden_layer_weights), self.hidden_layer_bias))
+        predicted_output = self.sigmoid(self.matrix_add(self.matrix_multiply(hidden_layer_output, self.output_layer_weights),
+                            self.output_layer_bias))
+        return predicted_output

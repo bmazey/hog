@@ -6,7 +6,7 @@ def get_image_array(path):
     image = cv2.imread(path)
     image_array = numpy.array(image)
     grayscale_image_array = convert_grayscale(image_array)
-    create_image(grayscale_image_array)
+    # create_image(grayscale_image_array)
     return grayscale_image_array
 
 

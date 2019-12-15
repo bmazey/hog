@@ -44,8 +44,21 @@ def detect():
 
     hog_network = NeuralNetwork(positive_hog_feature_vectors, negative_hog_feature_vectors, 200)
 
-    # TODO - lbp network!
-    # lbp_feature_vector = compute_lbp_feature_histograms(image)
+    # predictions!
+    positive_path = 'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\test_images_positive'
+    positive_files = os.listdir(positive_path)
+    for file in positive_files:
+        image = get_image_array(positive_path + '\\' + file)
+        gx_gradient = compute_horizontal_gradient_magnitude(image)
+        gy_gradient = compute_vertical_gradient_magnitude(image)
+        magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
+        theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
+        hog_vector = [compute_hog_feature(theta, magnitude)]
+        hog_lbp_vector = [hog_vector + compute_lbp_feature_histograms(image)]
+        hog_predicted = hog_network.predict(hog_vector)
+        hog_lbp_predicted = hog_lbp_network.predict(hog_lbp_vector)
+        print('predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
+        print('predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
 
 
 def generate_hog_feature_vectors(path):
