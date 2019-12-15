@@ -53,12 +53,33 @@ def detect():
         gy_gradient = compute_vertical_gradient_magnitude(image)
         magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
         theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
-        hog_vector = [compute_hog_feature(theta, magnitude)]
-        hog_lbp_vector = [hog_vector + compute_lbp_feature_histograms(image)]
-        hog_predicted = hog_network.predict(hog_vector)
+
+        hog_vector = compute_hog_feature(theta, magnitude)
+        hog_predicted = hog_network.predict([hog_vector])
+
+        lbp_vector = compute_lbp_feature_histograms(image)
+        hog_lbp_vector = [hog_vector + lbp_vector]
         hog_lbp_predicted = hog_lbp_network.predict(hog_lbp_vector)
-        print('predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
-        print('predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
+        print('(pos) predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
+        print('(pos) predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
+
+    negative_path = 'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\test_images_negative'
+    negative_files = os.listdir(negative_path)
+    for file in negative_files:
+        image = get_image_array(negative_path + '\\' + file)
+        gx_gradient = compute_horizontal_gradient_magnitude(image)
+        gy_gradient = compute_vertical_gradient_magnitude(image)
+        magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
+        theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
+
+        hog_vector = compute_hog_feature(theta, magnitude)
+        hog_predicted = hog_network.predict([hog_vector])
+
+        lbp_vector = compute_lbp_feature_histograms(image)
+        hog_lbp_vector = [hog_vector + lbp_vector]
+        hog_lbp_predicted = hog_lbp_network.predict(hog_lbp_vector)
+        print('(neg) predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
+        print('(neg) predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
 
 
 def generate_hog_feature_vectors(path):

@@ -1,13 +1,12 @@
 import math
 import random
-import copy
 
 
 # ALERT! number of human / non-human feature vectors must be the same!
 class NeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 2
-        self.learning_rate = 0.2
+        self.epochs = 22
+        self.learning_rate = 0.1
         self.human_feature_vectors = human_feature_vectors
         print('human feature vectors dimensions: ' + str(len(self.human_feature_vectors)) + ' x ' + str(len(self.human_feature_vectors[0])))
         self.nonhuman_feature_vectors = nonhuman_feature_vectors
@@ -44,6 +43,7 @@ class NeuralNetwork:
             self.update(self.human_feature_vectors)
 
         print('predicted output for human: ' + str(self.predicted_output))
+        # print('hidden layer weights: ' + str(self.hidden_layer_weights))
 
         # TODO reset predicted output?
 
@@ -56,6 +56,7 @@ class NeuralNetwork:
             self.update(self.nonhuman_feature_vectors)
 
         print('predicted output for non-human: ' + str(self.predicted_output))
+        # print('hidden layer weights: ' + str(self.hidden_layer_weights))
 
     # sigmoid function for output neuron
     def sigmoid(self, X):
@@ -208,10 +209,6 @@ class NeuralNetwork:
         return result
 
     def predict(self, vector):
-        print('dimensions of vector: ' + str(len(vector)) + ' x ' + str(len(vector[0])))
-        print('dimensions of hidden layer weights: ' + str(len(self.hidden_layer_weights)) + ' x ' + str(len(self.hidden_layer_weights[0])))
-        print('dimensions of hidden layer bias: ' + str(len(self.hidden_layer_bias)) + ' x ' + str(
-            len(self.hidden_layer_bias[0])))
         hidden_layer_output = self.relu(self.matrix_add(self.matrix_multiply(vector, self.hidden_layer_weights), self.hidden_layer_bias))
         predicted_output = self.sigmoid(self.matrix_add(self.matrix_multiply(hidden_layer_output, self.output_layer_weights),
                             self.output_layer_bias))
