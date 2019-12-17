@@ -1,5 +1,6 @@
 import math
 import random
+import numpy
 
 
 # ALERT! number of human / non-human feature vectors must be the same!
@@ -95,8 +96,9 @@ class NeuralNetwork:
         return result
 
     # forward direction for training
-    def feed_forward(self, vectors):
-        self.hidden_layer_output = self.relu(self.matrix_add(self.matrix_multiply(vectors, self.hidden_layer_weights), self.hidden_layer_bias))
+    def feed_forward(self, vector):
+        input_layer_nodes = numpy.array(vector)
+        self.hidden_layer_output = self.relu(self.matrix_add(self.matrix_multiply(vector, self.hidden_layer_weights), self.hidden_layer_bias))
 
         self.predicted_output = self.sigmoid(self.matrix_add(self.matrix_multiply(self.hidden_layer_output, self.output_layer_weights),
                                                 self.output_layer_bias))
