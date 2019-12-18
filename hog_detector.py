@@ -1,5 +1,5 @@
 import os
-from image_converter import get_image_array, convert_grayscale
+from image_converter import get_image_array, convert_grayscale, create_image
 from sobel_operator import compute_gradient_magnitude, compute_horizontal_gradient_magnitude, \
     compute_vertical_gradient_magnitude, compute_gradient_angle
 from histogram import Histogram
@@ -51,6 +51,8 @@ def detect():
         image = get_image_array(positive_path + '\\' + file)
         gx_gradient = compute_horizontal_gradient_magnitude(image)
         gy_gradient = compute_vertical_gradient_magnitude(image)
+        create_image(gx_gradient, 'gx_' + file)
+        create_image(gy_gradient, 'gy_' + file)
         magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
         theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
 
@@ -66,9 +68,12 @@ def detect():
     negative_path = 'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\test_images_negative'
     negative_files = os.listdir(negative_path)
     for file in negative_files:
+        print('file: ' + file)
         image = get_image_array(negative_path + '\\' + file)
         gx_gradient = compute_horizontal_gradient_magnitude(image)
         gy_gradient = compute_vertical_gradient_magnitude(image)
+        create_image(gx_gradient, 'gx_' + file)
+        create_image(gy_gradient, 'gy_' + file)
         magnitude = compute_gradient_magnitude(gx_gradient, gy_gradient)
         theta = compute_gradient_angle(magnitude, gx_gradient, gy_gradient)
 

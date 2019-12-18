@@ -5,7 +5,7 @@ import random
 # ALERT! number of human / non-human feature vectors must be the same!
 class NeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 22
+        self.epochs = 1
         self.learning_rate = 0.1
         self.human_feature_vectors = human_feature_vectors
         print('human feature vectors dimensions: ' + str(len(self.human_feature_vectors)) + ' x ' + str(len(self.human_feature_vectors[0])))

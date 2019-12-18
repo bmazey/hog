@@ -10,9 +10,9 @@ def get_image_array(path):
     return grayscale_image_array
 
 
-def create_image(array):
+def create_image(array, name):
     image = numpy.array(array)
-    cv2.imwrite('C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\outputs\\test.bmp', image)
+    cv2.imwrite('C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\outputs\\' + name, image)
 
 
 def convert_grayscale(array):
