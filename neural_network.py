@@ -36,7 +36,7 @@ class NeuralNetwork:
     def train(self):
         # train positive first
         for i in range(self.epochs):
-            print('human iteration: ' + str(i))
+            print('iteration: ' + str(i))
             for vector in self.human_feature_vectors:
 
                 self.feed_forward(vector)
@@ -45,14 +45,6 @@ class NeuralNetwork:
                 self.backpropogate(target)
                 self.update(vector)
 
-        print('predicted output for human: ' + str(self.predicted_output))
-        # print('hidden layer weights: ' + str(self.hidden_layer_weights))
-
-        # TODO reset predicted output?
-        self.predicted_output = numpy.array([0.0])
-
-        for i in range(self.epochs):
-            print('non-human iteration: ' + str(i))
             for vector in self.nonhuman_feature_vectors:
 
                 self.feed_forward(vector)
@@ -60,10 +52,6 @@ class NeuralNetwork:
                 target = [0.0]
                 self.backpropogate(target)
                 self.update(vector)
-
-        print('predicted output for non-human: ' + str(self.predicted_output))
-        # print('hidden layer weights: ' + str(self.hidden_layer_weights))
-
 
     def sigmoid(self, x):
         return 1 / (1 + numpy.exp(-x))
@@ -169,6 +157,6 @@ class NeuralNetwork:
 
     def predict(self, vector):
         input = numpy.array(vector)
-        hidden_layer_output = self.relu(numpy.dot(input, self.hidden_layer_weights) + self.hidden_layer_bias)
-        predicted_output = self.sigmoid(numpy.dot(hidden_layer_output, self.output_layer_weights) + self.output_layer_bias)
+        hidden_layer_output = self.relu(numpy.dot(input, self.hidden_layer_weights))
+        predicted_output = self.sigmoid(numpy.dot(hidden_layer_output, self.output_layer_weights))
         return predicted_output
