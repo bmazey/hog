@@ -62,8 +62,16 @@ def detect():
         lbp_vector = compute_lbp_feature_histograms(image)
         hog_lbp_vector = [hog_vector + lbp_vector]
         hog_lbp_predicted = hog_lbp_network.predict(hog_lbp_vector)
-        print('(pos) predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
-        print('(pos) predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
+        print('(human) predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
+        print('(human) predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
+        # print feature vectors
+        if file == 'crop001034b.bmp':
+            with open('crop001034b-hog.txt', 'w') as f:
+                for item in hog_vector:
+                    f.write("%s\n" % item)
+            with open('crop001034b-lbp.txt', 'w') as f:
+                for item in lbp_vector:
+                    f.write("%s\n" % item)
 
     negative_path = 'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\test_images_negative'
     negative_files = os.listdir(negative_path)
@@ -82,8 +90,8 @@ def detect():
         lbp_vector = compute_lbp_feature_histograms(image)
         hog_lbp_vector = [hog_vector + lbp_vector]
         hog_lbp_predicted = hog_lbp_network.predict(hog_lbp_vector)
-        print('(neg) predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
-        print('(neg) predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
+        print('(non-human) predicted hog output for: ' + str(file) + ' = ' + str(hog_predicted))
+        print('(non-human) predicted hog lbp output for: ' + str(file) + ' = ' + str(hog_lbp_predicted))
 
 
 def generate_hog_feature_vectors(path):

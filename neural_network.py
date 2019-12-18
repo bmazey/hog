@@ -6,7 +6,7 @@ import numpy
 # ALERT! number of human / non-human feature vectors must be the same!
 class NeuralNetwork:
     def __init__(self, human_feature_vectors, nonhuman_feature_vectors, hidden_layer_neurons):
-        self.epochs = 1
+        self.epochs = 22
         self.learning_rate = 0.1
         self.human_feature_vectors = human_feature_vectors
         print('human feature vectors dimensions: ' + str(len(self.human_feature_vectors)) + ' x ' + str(len(self.human_feature_vectors[0])))
@@ -40,7 +40,6 @@ class NeuralNetwork:
             for vector in self.human_feature_vectors:
 
                 self.feed_forward(vector)
-                # FIXME - needs to be 1 x 10
                 target = [1.0]
                 self.backpropogate(target)
                 self.update(vector)
@@ -48,7 +47,6 @@ class NeuralNetwork:
             for vector in self.nonhuman_feature_vectors:
 
                 self.feed_forward(vector)
-                # FIXME - needs to be 1 x 10
                 target = [0.0]
                 self.backpropogate(target)
                 self.update(vector)
