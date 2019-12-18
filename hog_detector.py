@@ -68,7 +68,6 @@ def detect():
     negative_path = 'C:\\Users\\Brandon\\PycharmProjects\\hog\\resources\\test_images_negative'
     negative_files = os.listdir(negative_path)
     for file in negative_files:
-        print('file: ' + file)
         image = get_image_array(negative_path + '\\' + file)
         gx_gradient = compute_horizontal_gradient_magnitude(image)
         gy_gradient = compute_vertical_gradient_magnitude(image)
